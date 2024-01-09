@@ -23,19 +23,11 @@ export class ProdutosController {
 
   @Post()
   async criar(@Body() dadosProduto: CriaProdutoDTO) {
-    const produto = new ProdutoEntity();
-
-    produto.id = randomUUID();
-    produto.nome = dadosProduto.nome;
-    produto.usuarioId = dadosProduto.usuarioId;
-    produto.valor = dadosProduto.valor;
-    produto.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
-    produto.descricao = dadosProduto.descricao;
-    produto.categoria = dadosProduto.categoria;
-    produto.caracteristicas = dadosProduto.caracteristicas;
-    produto.imagens = dadosProduto.imagens;
-    const produtoCadastrado = this.produtoService.criaProduto(produto);
-    return produtoCadastrado;
+    const produtoCadastrado = this.produtoService.criaProduto(dadosProduto);
+    return {
+      mensagem: 'Produto criado com sucesso.',
+      produto: produtoCadastrado,
+    };
   }
 
   @Get()
