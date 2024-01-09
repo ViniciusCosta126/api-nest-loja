@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,7 +21,7 @@ export class ProdutoEntity {
   @Column({ name: 'nome', nullable: false })
   nome: string;
 
-  @Column({ name: 'valor', nullable: false })
+  @Column({ name: 'valor', nullable: false, type: 'real' })
   valor: number;
 
   @Column({ name: 'quantidade_disponivel', nullable: false })
@@ -29,8 +30,18 @@ export class ProdutoEntity {
   @Column({ name: 'descricao', nullable: false })
   descricao: string;
 
-  //caracteristicas: ProdutoCaracteristica[];
-  //imagens: ProdutoImagens[];
+  @OneToMany(
+    () => ProdutoCaracteristica,
+    (produtoCaracteristica) => produtoCaracteristica.produto,
+    { cascade: true, eager: true },
+  )
+  caracteristicas: ProdutoCaracteristica[];
+
+  @OneToMany(() => ProdutoImagens, (produtoImagem) => produtoImagem.produto, {
+    cascade: true,
+    eager: true,
+  })
+  imagens: ProdutoImagens[];
 
   @Column({ name: 'categoria', nullable: false })
   categoria: string;

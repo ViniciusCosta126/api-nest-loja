@@ -32,8 +32,8 @@ export class ProdutosController {
     produto.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
     produto.descricao = dadosProduto.descricao;
     produto.categoria = dadosProduto.categoria;
-    //produto.caracteristicas = dadosProduto.caracteristicas;
-    //produto.imagens = dadosProduto.imagens;
+    produto.caracteristicas = dadosProduto.caracteristicas;
+    produto.imagens = dadosProduto.imagens;
     const produtoCadastrado = this.produtoService.criaProduto(produto);
     return produtoCadastrado;
   }
