@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListaUsuarioDTO } from '../dto/ListaUsuario.dto';
 import { UsuarioEntity } from '../entities/usario.entity';
@@ -31,10 +31,22 @@ export class UsuarioService {
   }
 
   async atualizaUsuario(id: string, ususarioEntity: AtualizaUsuarioDTO) {
+    const usuario = await this.usuarioRepository.findOneBy({ id: id });
+
+    if (usuario === null) {
+      throw new NotFoundException('Usuario não encontrado');
+    }
+
     await this.usuarioRepository.update(id, ususarioEntity);
   }
 
   async deletaUsuario(id: string) {
+    const usuario = await this.usuarioRepository.findOneBy({ id: id });
+
+    if (usuario === null) {
+      throw new NotFoundException('Usuario não encontrado');
+    }
+
     await this.usuarioRepository.delete(id);
   }
 }
