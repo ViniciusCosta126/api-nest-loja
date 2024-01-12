@@ -16,10 +16,20 @@ export class UsuarioService {
   async criaUsuario(dadosDoUsuario: CriaUsuarioDto) {
     const usuarioEntity = new UsuarioEntity();
 
-    usuarioEntity.email = dadosDoUsuario.email;
-    usuarioEntity.senha = dadosDoUsuario.senha;
-    usuarioEntity.nome = dadosDoUsuario.nome;
+    Object.assign(usuarioEntity, dadosDoUsuario as UsuarioEntity);
+
     return this.usuarioRepository.save(usuarioEntity);
+  }
+
+  async buscaPorEmail(email: string) {
+    const checkEmail = await this.usuarioRepository.findOne({
+      where: { email },
+    });
+
+    if (checkEmail === null)
+      throw new NotFoundException('O email não foi encontrado.');
+
+    return checkEmail;
   }
 
   async listaUsuarios() {
@@ -37,7 +47,9 @@ export class UsuarioService {
       throw new NotFoundException('Usuario não encontrado');
     }
 
-    await this.usuarioRepository.update(id, ususarioEntity);
+    Object.assign(usuario, ususarioEntity as UsuarioEntity);
+
+    await this.usuarioRepository.save(usuario);
   }
 
   async deletaUsuario(id: string) {

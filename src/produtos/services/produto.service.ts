@@ -15,13 +15,7 @@ export class ProdutoService {
   async criaProduto(dadosProduto: CriaProdutoDTO) {
     const produtoEntity = new ProdutoEntity();
 
-    produtoEntity.nome = dadosProduto.nome;
-    produtoEntity.valor = dadosProduto.valor;
-    produtoEntity.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
-    produtoEntity.descricao = dadosProduto.descricao;
-    produtoEntity.categoria = dadosProduto.categoria;
-    produtoEntity.caracteristicas = dadosProduto.caracteristicas;
-    produtoEntity.imagens = dadosProduto.imagens;
+    Object.assign(produtoEntity, dadosProduto as ProdutoEntity);
 
     return this.produtoRepository.save(produtoEntity);
   }
@@ -43,9 +37,9 @@ export class ProdutoService {
 
   async atualizaProduto(id: string, dados: AtualizaProdutoDTO) {
     const produto = await this.buscaPorId(id);
-    if (produto) {
-      await this.produtoRepository.update(id, dados);
-    }
+
+    Object.assign(produto, dados as ProdutoEntity);
+    return this.produtoRepository.save(produto);
   }
 
   async removeProduto(id: string) {
