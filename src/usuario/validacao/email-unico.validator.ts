@@ -5,17 +5,13 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
 } from 'class-validator';
-import { UsuarioRepository } from '../repositories/usuario.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsuarioService } from '../services/usuario.service';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
 export class EmailEhUnicoValidator implements ValidatorConstraintInterface {
-  constructor(
-    private usuarioRepository: UsuarioRepository,
-    private readonly usuarioService: UsuarioService,
-  ) {}
+  constructor(private readonly usuarioService: UsuarioService) {}
 
   // email-eh-unico.validator.ts
 
