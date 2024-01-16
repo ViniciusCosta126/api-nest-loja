@@ -25,7 +25,7 @@ export class ProdutoService {
     return produtosSalvos;
   }
 
-  private async buscaPorId(id: string) {
+  async buscaPorId(id: string) {
     const possivelProduto = await this.produtoRepository.findOneBy({ id: id });
 
     if (!possivelProduto) {

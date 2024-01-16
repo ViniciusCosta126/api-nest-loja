@@ -6,20 +6,17 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ProdutoRepository } from '../repositories/produtos.repository';
 import { CriaProdutoDTO } from '../dto/CriaProduto.dto';
-import { ProdutoEntity } from '../entities/Produto.entity';
 import { AtualizaProdutoDTO } from '../dto/AtualizaProduto.dto';
-import { randomUUID } from 'crypto';
+
 import { ProdutoService } from '../services/produto.service';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('/produtos')
 export class ProdutosController {
-  constructor(
-    private produtoService: ProdutoService,
-    private produtoRepository: ProdutoRepository,
-  ) {}
+  constructor(private produtoService: ProdutoService) {}
 
   @Post()
   async criar(@Body() dadosProduto: CriaProdutoDTO) {
@@ -34,6 +31,14 @@ export class ProdutosController {
   async listar() {
     const produtos = await this.produtoService.listaProduto();
     return produtos;
+  }
+
+  @Get('/:id')
+  @UseInterceptors(CacheInterceptor)
+  async listaPorId(@Param('id') id: string) {
+    const produto = await this.produtoService.buscaPorId(id);
+
+    return produto;
   }
 
   @Put('/:id')

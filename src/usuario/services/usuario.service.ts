@@ -37,6 +37,7 @@ export class UsuarioService {
     const usuariosLista = usuariosSalvos.map(
       (usuarioSalvo) => new ListaUsuarioDTO(usuarioSalvo.id, usuarioSalvo.nome),
     );
+    // eslint-disable-next-line prettier/prettier
     return usuariosLista;
   }
 
