@@ -28,6 +28,7 @@ export class ProdutosController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async listar() {
     const produtos = await this.produtoService.listaProduto();
     return produtos;
