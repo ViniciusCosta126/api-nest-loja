@@ -8,20 +8,24 @@ import {
   Put,
 } from '@nestjs/common';
 import { CriaUsuarioDto } from '../dto/CriaUsuario.dto';
-import { UsuarioEntity } from '../entities/usario.entity';
-import { v4 as uuid } from 'uuid';
 import { ListaUsuarioDTO } from '../dto/ListaUsuario.dto';
 import { AtualizaUsuarioDTO } from '../dto/AtualizaUsuario.dto';
 import { UsuarioService } from '../services/usuario.service';
+import { HashearSenhaPipe } from '../../recursos/pipes/hashear-senha.pipe';
 
 @Controller('/usuarios')
 export class UsuarioController {
   constructor(private usarioService: UsuarioService) {}
 
   @Post()
-  async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDto) {
-    const usuarioCriado = await this.usarioService.criaUsuario(dadosDoUsuario);
-
+  async criaUsuario(
+    @Body() { senha, ...dadosDoUsuario }: CriaUsuarioDto,
+    @Body('senha', HashearSenhaPipe) senhaHasheada: string,
+  ) {
+    const usuarioCriado = await this.usarioService.criaUsuario({
+      senha: senhaHasheada,
+      ...dadosDoUsuario,
+    });
     return {
       usuario: new ListaUsuarioDTO(usuarioCriado.id, usuarioCriado.nome),
       messagem: 'usuário criado com sucesso',
